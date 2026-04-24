@@ -1,0 +1,113 @@
+.register-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  font-family: Inter, sans-serif;
+}
+
+/* CARD */
+.card {
+  width: 380px;
+  padding: 30px;
+  border-radius: 16px;
+  background: rgba(17, 24, 39, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  color: white;
+  animation: fadeIn 0.5s ease;
+}
+
+.logo {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #60a5fa;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+p {
+  text-align: center;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+/* FORM */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: #0b1220;
+  color: white;
+  outline: none;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #3b82f6;
+  transform: scale(1.02);
+}
+
+/* BUTTON */
+button {
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  background: #334155;
+  cursor: not-allowed;
+}
+
+/* ERROR */
+.error {
+  color: #f87171;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* FOOTER */
+.footer {
+  margin-top: 15px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.footer a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+/* ANIMAÇÃO */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
