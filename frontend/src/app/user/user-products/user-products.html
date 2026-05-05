@@ -1,0 +1,13 @@
+<div class="page">
+
+  <h1>My Products</h1>
+
+  <div class="grid">
+    <div class="card" *ngFor="let product of products">
+      <h3>{{ product.name }}</h3>
+      <p>Qty: {{ product.quantity }}</p>
+      <p>Price: {{ product.price }}</p>
+    </div>
+  </div>
+
+</div>

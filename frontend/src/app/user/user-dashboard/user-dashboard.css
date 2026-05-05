@@ -1,0 +1,16 @@
+.dashboard {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #1e3a8a;
+}
+
+.card {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}

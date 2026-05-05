@@ -1,0 +1,12 @@
+.profile {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.box {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f9fafb;
+}
