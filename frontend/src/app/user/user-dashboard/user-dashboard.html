@@ -1,10 +1,66 @@
-<div class="dashboard">
+<nav class="navbar">
 
-  <h1>User Dashboard</h1>
+  <div class="brand">
+    <span class="dot"></span>
+    TechFlow
+  </div>
 
-  <div class="card">
-    <h2>Welcome back!</h2>
-    <p>Manage your products and profile.</p>
+  <div class="links">
+    <a routerLink="/user" routerLinkActive="active">Dashboard</a>
+    <a routerLink="/user/products" routerLinkActive="active">Products</a>
+    <a routerLink="/user/profile" routerLinkActive="active">Profile</a>
+    <a routerLink="/user/settings" routerLinkActive="active">Settings</a>
+  </div>
+
+  <div class="right">
+    <span class="email">{{ email }}</span>
+    <button (click)="logout()">Logout</button>
+  </div>
+
+</nav>
+
+<div class="container">
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>Services</h3>
+      <p>{{ servicesCount }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Products</h3>
+      <p>{{ productsCount }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Progress</h3>
+      <p>{{ progress }}%</p>
+    </div>
+
+  </div>
+
+  <div class="progress-box">
+
+    <h4>Usage Progress</h4>
+
+    <div class="progress-bar">
+      <div class="fill" [style.width.%]="progress"></div>
+    </div>
+
+    <small>{{ used }}/{{ limit }} used</small>
+
+  </div>
+
+  <div class="activity">
+
+    <h3>Recent Purchases</h3>
+
+    <div *ngFor="let item of purchases" class="item">
+      <span>{{ item.name }}</span>
+      <small>{{ item.date }}</small>
+    </div>
+
   </div>
 
 </div>

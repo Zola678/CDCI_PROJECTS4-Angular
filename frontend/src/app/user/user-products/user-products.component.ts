@@ -1,25 +1,72 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-products',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './user-products.html',
   styleUrls: ['./user-products.css']
 })
-export class UserProductsComponent implements OnInit {
+export class UserProductsComponent {
 
   products: any[] = [];
 
-  constructor(private http: HttpClient) {}
+  newProduct = {
+    name: '',
+    description: '',
+    price: 0
+  };
 
-  ngOnInit(): void {
-    this.http.get<any[]>('http://127.0.0.1:8000/api/products')
-      .subscribe({
-        next: (data) => this.products = data,
-        error: (err) => console.error(err)
-      });
+  constructor(private router: Router) {
+    this.load();
+  }
+
+  load() {
+    this.products = JSON.parse(localStorage.getItem('products') || '[]');
+  }
+
+  createProduct() {
+    if (!this.newProduct.name || !this.newProduct.price) return;
+
+    const product = {
+      id: Date.now(),
+      ...this.newProduct
+    };
+
+    this.products.push(product);
+    this.sync();
+
+    this.newProduct = { name: '', description: '', price: 0 };
+  }
+
+  deleteProduct(id: number) {
+    this.products = this.products.filter(p => p.id !== id);
+    this.sync();
+  }
+
+  buy(product: any) {
+    const purchases = JSON.parse(localStorage.getItem('purchases') || '[]');
+
+    purchases.push({
+      name: product.name,
+      date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem('purchases', JSON.stringify(purchases));
+
+    window.dispatchEvent(new Event('products-updated'));
+  }
+
+  sync() {
+    localStorage.setItem('products', JSON.stringify(this.products));
+    window.dispatchEvent(new Event('products-updated'));
+  }
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login']);
   }
 }

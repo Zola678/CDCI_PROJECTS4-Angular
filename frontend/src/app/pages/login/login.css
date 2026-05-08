@@ -3,61 +3,112 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+
+  /* 🔥 fundo mais moderno */
+  background-color: #2b9cdd;
 }
 
 .auth-card {
-  width: 360px;
-  background: white;
+  width: 380px;
+
+  /* 🔥 glass effect leve */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+
   padding: 28px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border-radius: 14px;
+
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  box-shadow: 10px 20px 40px rgba(0, 0, 0, 0.25);
 }
 
 h1 {
   margin: 0;
+  font-size: 22px;
   color: #1e3a8a;
 }
 
 p {
+  margin-bottom: 18px;
   color: #64748b;
-  margin-bottom: 20px;
+  font-size: 13px;
 }
 
+/* INPUT */
 input {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
+  padding: 12px;
+  margin-top: 10px;
+
+  border: 1px solid #c7d2fe;
+  border-radius: 8px;
+
+  outline: none;
+  transition: 0.25s;
 }
 
+input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+/* BOTÃO */
 button {
   width: 100%;
-  padding: 10px;
-  background: #2563eb;
+  margin-top: 18px;
+  padding: 12px;
+
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
+
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+
+  font-weight: bold;
+
   cursor: pointer;
+  transition: 0.25s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
 }
 
 button:disabled {
   background: #93c5fd;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
+/* STATUS */
 .error {
   margin-top: 10px;
-  color: red;
-  font-size: 13px;
+  font-size: 12px;
+  color: #dc2626;
 }
 
+.success {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #16a34a;
+}
+
+/* FOOTER */
 .footer {
-  margin-top: 12px;
+  margin-top: 14px;
+  font-size: 12px;
   text-align: center;
+  color: #64748b;
 }
 
 .footer a {
   color: #2563eb;
   text-decoration: none;
+  margin-left: 4px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
 }

@@ -1,17 +1,47 @@
 <div class="dashboard">
 
-  <h1>Admin Dashboard</h1>
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Admin Dashboard</h1>
 
-  <div class="cards">
-    <div class="card">
-      <h2>{{ usersCount }}</h2>
-      <p>Users</p>
+    <div class="nav-links">
+      <a routerLink="/products">Products</a>
+      <a routerLink="/users">Users</a>
+      <a routerLink="/login">Logout</a>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div *ngIf="loading" class="loading">
+    <p>Loading data...</p>
+  </div>
+
+  <!-- CONTENT -->
+  <div *ngIf="!loading">
+
+    <!-- STATS -->
+    <div class="cards">
+      <div class="card" routerLink="/users">
+        <h2>{{ usersCount }}</h2>
+        <p>Users</p>
+      </div>
+
+      <div class="card" routerLink="/products">
+        <h2>{{ productsCount }}</h2>
+        <p>Products</p>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>{{ productsCount }}</h2>
-      <p>Products</p>
+    <!-- QUICK ACTIONS -->
+    <div class="actions">
+      <h3>Quick Actions</h3>
+
+      <div class="action-buttons">
+        <button routerLink="/products">➕ Add Product</button>
+        <button routerLink="/users">👤 Manage Users</button>
+      </div>
     </div>
+
   </div>
 
 </div>

@@ -1,18 +1,81 @@
-.page {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
-
-.grid {
+.navbar {
   display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 14px 25px;
+  background: #0a192f;
+  color: white;
 }
 
-.card {
-  width: 200px;
-  padding: 15px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
+.links a {
+  margin: 0 10px;
+  color: #ccd6f6;
+  text-decoration: none;
+}
+
+.links a:hover,
+.active {
+  color: #4ea1ff;
+}
+
+.logout {
+  background: transparent;
+  border: 1px solid #4ea1ff;
+  color: #4ea1ff;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* CONTAINER */
+.container {
+  padding: 25px;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+/* FORM */
+.form-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.form-box input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.form-box button {
+  background: #0a192f;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* TABLE */
+table {
+  width: 100%;
   background: white;
+  border-collapse: collapse;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+th {
+  background: #0a192f;
+  color: white;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+td button {
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 5px 8px;
+  cursor: pointer;
 }

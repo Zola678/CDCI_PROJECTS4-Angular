@@ -17,7 +17,7 @@ export class UserSettingsComponent {
     email: 'zola@test.com'
   };
 
-  // 🌙 tema
+ 
   darkMode = false;
 
   toggleTheme() {
