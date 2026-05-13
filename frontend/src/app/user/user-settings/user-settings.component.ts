@@ -1,33 +1,59 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './user-settings.html',
   styleUrls: ['./user-settings.css']
 })
 export class UserSettingsComponent {
 
-  // 👤 user model (obrigatório para ngModel funcionar)
   user = {
-    name: 'Zola',
-    email: 'zola@test.com'
+    name: '',
+    email: '',
+    role: 'user'
   };
 
- 
   darkMode = false;
 
-  toggleTheme() {
-    this.darkMode = !this.darkMode;
+  constructor(private router: Router) {}
 
-    // opcional: aplicar no body
-    if (this.darkMode) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
+  ngOnInit(): void {
+
+    this.user.name = localStorage.getItem('name') || 'User';
+    this.user.email = localStorage.getItem('email') || 'user@techflow.com';
+    this.user.role = localStorage.getItem('role') || 'user';
+
+    this.darkMode = localStorage.getItem('theme') === 'dark';
+    this.applyTheme();
+  }
+
+  toggleTheme(): void {
+    this.darkMode = !this.darkMode;
+    localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
+    this.applyTheme();
+  }
+
+  applyTheme(): void {
+    document.body.className = this.darkMode ? 'dark' : 'light';
+  }
+
+  logout(): void {
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
+
+  deleteAccount(): void {
+    if (!confirm('Tens certeza que queres apagar a conta?')) return;
+
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
+
+  goBack(): void {
+    this.router.navigate(['/user']);
   }
 }

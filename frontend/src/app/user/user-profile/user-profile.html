@@ -1,11 +1,42 @@
-<div class="profile">
+<!-- NAVBAR (IGUAL USER DASHBOARD) -->
+<nav class="navbar">
 
-  <h1>My Profile</h1>
+  <div class="brand">
+    <span class="dot"></span>
+    TechFlow
+  </div>
 
-  <div class="box">
-    <p><b>Name:</b> {{ user.name }}</p>
-    <p><b>Email:</b> {{ user.email }}</p>
-    <p><b>Role:</b> {{ user.role }}</p>
+  <div class="links">
+    <a routerLink="/user" routerLinkActive="active">Dashboard</a>
+    <a routerLink="/user/products" routerLinkActive="active">Products</a>
+    <a routerLink="/user/profile" routerLinkActive="active">Profile</a>
+    <a routerLink="/user/settings" routerLinkActive="active">Settings</a>
+  </div>
+
+  <div class="right">
+    <span class="email">{{ user.email }}</span>
+    <button (click)="logout()">Logout</button>
+  </div>
+
+</nav>
+
+<!-- PROFILE -->
+<div class="profile-container">
+
+  <h1 class="title">My Profile</h1>
+
+  <div class="card">
+
+    <div class="avatar">
+      {{ user.name.charAt(0).toUpperCase() }}
+    </div>
+
+    <h2>{{ user.name }}</h2>
+
+    <p class="email">{{ user.email }}</p>
+
+    <span class="role">{{ user.role }}</span>
+
   </div>
 
 </div>

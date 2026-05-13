@@ -1,3 +1,4 @@
+<!-- NAVBAR -->
 <nav class="navbar">
 
   <div class="brand">
@@ -19,8 +20,12 @@
 
 </nav>
 
+<!-- DASHBOARD -->
 <div class="container">
 
+  <h1 class="title">Dashboard</h1>
+
+  <!-- STATS -->
   <div class="cards">
 
     <div class="card">
@@ -33,32 +38,30 @@
       <p>{{ productsCount }}</p>
     </div>
 
-    <div class="card">
-      <h3>Progress</h3>
-      <p>{{ progress }}%</p>
-    </div>
-
   </div>
 
-  <div class="progress-box">
-
-    <h4>Usage Progress</h4>
-
-    <div class="progress-bar">
-      <div class="fill" [style.width.%]="progress"></div>
-    </div>
-
-    <small>{{ used }}/{{ limit }} used</small>
-
-  </div>
-
+  <!-- PURCHASES -->
   <div class="activity">
 
     <h3>Recent Purchases</h3>
 
+    <!-- EMPTY -->
+    <div *ngIf="purchases.length === 0" class="empty">
+      Nenhuma compra encontrada 🚫
+    </div>
+
+    <!-- LIST -->
     <div *ngFor="let item of purchases" class="item">
-      <span>{{ item.name }}</span>
-      <small>{{ item.date }}</small>
+
+      <div>
+        <span>{{ item.name }}</span>
+        <small>{{ item.date }}</small>
+      </div>
+
+      <button class="delete" (click)="deletePurchase(item.id)">
+        🗑
+      </button>
+
     </div>
 
   </div>

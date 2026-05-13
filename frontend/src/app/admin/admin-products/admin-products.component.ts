@@ -1,17 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
+
+interface Product {
+  id: number;
+  name: string;
+  description?: string;
+  price?: number;
+  user?: {
+    name: string;
+    email: string;
+  };
+}
 
 @Component({
   selector: 'app-admin-products',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './admin-products.html',
   styleUrls: ['./admin-products.css']
 })
 export class AdminProductsComponent implements OnInit {
 
-  products: any[] = [];
+  products: Product[] = [];
+
   loading = true;
   error = '';
 
@@ -22,13 +35,18 @@ export class AdminProductsComponent implements OnInit {
   }
 
   loadProducts(): void {
-    this.http.get<any[]>('http://127.0.0.1:8000/api/products')
+
+    this.loading = true;
+    this.error = '';
+
+    this.http.get<Product[]>('http://127.0.0.1:8000/api/products')
       .subscribe({
         next: (data) => {
-          this.products = data;
+          this.products = Array.isArray(data) ? data : [];
           this.loading = false;
         },
-        error: () => {
+        error: (err) => {
+          console.error(err);
           this.error = 'Erro ao carregar produtos';
           this.loading = false;
         }
@@ -36,12 +54,16 @@ export class AdminProductsComponent implements OnInit {
   }
 
   deleteProduct(id: number): void {
+
+    if (!confirm('Tens certeza que queres eliminar este produto?')) return;
+
     this.http.delete(`http://127.0.0.1:8000/api/products/${id}`)
       .subscribe({
         next: () => {
           this.products = this.products.filter(p => p.id !== id);
         },
-        error: () => {
+        error: (err) => {
+          console.error(err);
           this.error = 'Erro ao eliminar produto';
         }
       });

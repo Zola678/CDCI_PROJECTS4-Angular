@@ -1,12 +1,198 @@
-.profile {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+
+/* =========================
+   🌐 BASE
+========================= */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+
+  background: #f5f7fb;
+  color: #1a1f2e;
 }
 
-.box {
-  margin-top: 20px;
-  padding: 20px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background: #f9fafb;
+/* =========================
+   🧊 NAVBAR GLASS
+========================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px 28px;
+
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(14px);
+
+  border-bottom: 1px solid rgba(31,182,255,0.15);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.brand {
+  color: #1fb6ff;
+  font-weight: 700;
+}
+
+.links a {
+  margin: 0 10px;
+  text-decoration: none;
+
+  color: #666;
+  font-weight: 500;
+}
+
+.links a.active {
+  color: #1fb6ff;
+}
+
+.right button {
+  background: #1fb6ff;
+  border: none;
+  color: white;
+
+  padding: 8px 14px;
+  border-radius: 8px;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.right button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(31,182,255,0.25);
+}
+
+/* =========================
+   📦 CONTAINER
+========================= */
+.profile-container {
+  padding: 120px 40px 40px;
+  text-align: center;
+}
+
+/* =========================
+   🎯 TITLE
+========================= */
+.title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #1a1f2e;
+
+  margin-bottom: 30px;
+}
+
+/* =========================
+   🧊 PROFILE CARD (OPEN BOX)
+========================= */
+.card {
+  width: 340px;
+  margin: auto;
+
+  padding: 32px;
+  border-radius: 16px;
+
+  background: white;
+  border: 1px solid rgba(0,0,0,0.06);
+
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+
+  transition: 0.3s;
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* OPEN BOX HOVER EFFECT */
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 60px rgba(31,182,255,0.18);
+}
+
+/* subtle glow border animation */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  border-radius: 16px;
+  padding: 1px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(31,182,255,0.4),
+    transparent
+  );
+
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* =========================
+   👤 AVATAR OPEN BOX STYLE
+========================= */
+.avatar {
+  width: 85px;
+  height: 85px;
+
+  margin: 0 auto 15px;
+
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, #1fb6ff, #4f7dff);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  box-shadow: 0 10px 25px rgba(31,182,255,0.25);
+}
+
+/* =========================
+   👤 USER INFO
+========================= */
+.email {
+  color: #666;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+/* =========================
+   🏷 ROLE BADGE
+========================= */
+.role {
+  display: inline-block;
+  margin-top: 12px;
+
+  padding: 5px 12px;
+  border-radius: 20px;
+
+  background: #1fb6ff;
+  color: white;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =========================
+   ✨ MICRO INTERACTIONS
+========================= */
+.card * {
+  transition: 0.3s;
+}
+
+.card:hover .avatar {
+  transform: scale(1.05);
 }

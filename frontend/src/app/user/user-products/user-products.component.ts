@@ -1,12 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-user-products',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    RouterLinkActive
+  ],
   templateUrl: './user-products.html',
   styleUrls: ['./user-products.css']
 })
@@ -20,20 +25,31 @@ export class UserProductsComponent {
     price: 0
   };
 
-  constructor(private router: Router) {
+  constructor() {
     this.load();
+
+    // 🔥 sync automático quando houver mudanças
+    window.addEventListener('products-updated', () => {
+      this.load();
+    });
   }
 
-  load() {
-    this.products = JSON.parse(localStorage.getItem('products') || '[]');
+  // 📦 carregar produtos
+  load(): void {
+    const data = localStorage.getItem('products');
+    this.products = data ? JSON.parse(data) : [];
   }
 
-  createProduct() {
-    if (!this.newProduct.name || !this.newProduct.price) return;
+  // ➕ criar produto
+  createProduct(): void {
+
+    if (!this.newProduct.name || this.newProduct.price <= 0) return;
 
     const product = {
       id: Date.now(),
-      ...this.newProduct
+      name: this.newProduct.name,
+      description: this.newProduct.description,
+      price: this.newProduct.price
     };
 
     this.products.push(product);
@@ -42,31 +58,40 @@ export class UserProductsComponent {
     this.newProduct = { name: '', description: '', price: 0 };
   }
 
-  deleteProduct(id: number) {
+  // 🗑 eliminar produto
+  deleteProduct(id: number): void {
+
     this.products = this.products.filter(p => p.id !== id);
     this.sync();
   }
 
-  buy(product: any) {
+  // 🛒 comprar produto
+  buy(product: any): void {
+
     const purchases = JSON.parse(localStorage.getItem('purchases') || '[]');
 
     purchases.push({
+      id: Date.now(),
       name: product.name,
       date: new Date().toLocaleString()
     });
 
     localStorage.setItem('purchases', JSON.stringify(purchases));
 
+    // 🔥 padrão correto (UNIFICADO)
     window.dispatchEvent(new Event('products-updated'));
   }
 
-  sync() {
+  // 🔄 sincronizar storage
+  sync(): void {
+
     localStorage.setItem('products', JSON.stringify(this.products));
+
     window.dispatchEvent(new Event('products-updated'));
   }
 
-  logout() {
-    localStorage.clear();
-    this.router.navigate(['/login']);
+  // ⚡ performance
+  trackById(index: number, item: any): number {
+    return item.id;
   }
 }

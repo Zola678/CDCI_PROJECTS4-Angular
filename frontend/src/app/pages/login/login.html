@@ -1,5 +1,13 @@
 <div class="auth-container">
 
+  <div class="bg-image"></div>
+  <div class="overlay"></div>
+
+  <!-- 🔙 BOTÃO VOLTAR -->
+  <button class="back-btn" (click)="goBack()">
+    ← Back
+  </button>
+
   <div class="auth-card">
 
     <h1>Welcome Back</h1>
@@ -28,16 +36,17 @@
 
     </form>
 
-    <!-- error -->
     <div class="error" *ngIf="error">
       {{ error }}
     </div>
 
-    <!-- links -->
+    <!-- 🔥 LINK MELHORADO -->
     <div class="footer">
-      <a routerLink="/register">Create account</a>
+      <span>Don't have an account?</span>
+      <a routerLink="/register" class="link-register">
+        Create account
+      </a>
     </div>
 
   </div>
-
 </div>

@@ -1,1 +1,35 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+
+  <h1 class="title">Meus Serviços</h1>
+
+  <div class="grid">
+
+    <div class="card" *ngFor="let service of services">
+
+      <div class="header">
+        <h2>{{ service.name }}</h2>
+        <span class="tag">{{ service.category }}</span>
+      </div>
+
+      <p class="status" [ngClass]="service.status.toLowerCase()">
+        {{ service.status }}
+      </p>
+
+      <div class="progress-bar">
+        <div class="progress" [style.width.%]="service.progress"></div>
+      </div>
+
+      <div class="info">
+        <small>📅 {{ service.createdAt }}</small>
+        <small>⏳ {{ service.deadline }}</small>
+      </div>
+
+      <div class="actions">
+        <button>Detalhes</button>
+        <button class="primary">Abrir</button>
+      </div>
+
+    </div>
+
+  </div>
+</div>

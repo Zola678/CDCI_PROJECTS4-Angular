@@ -1,47 +1,98 @@
-<div class="dashboard">
+ <!-- NAVBAR -->
+<nav class="navbar">
 
-  <!-- HEADER -->
-  <div class="header">
-    <h1>Admin Dashboard</h1>
+  <div class="brand">
+    <span class="dot"></span>
+    TechFlow Admin
+  </div>
 
-    <div class="nav-links">
-      <a routerLink="/products">Products</a>
-      <a routerLink="/users">Users</a>
-      <a routerLink="/login">Logout</a>
+  <div class="links">
+    <a routerLink="/admin" routerLinkActive="active">Dashboard</a>
+    <a routerLink="/admin/users" routerLinkActive="active">Users</a>
+    <a routerLink="/admin/products" routerLinkActive="active">Products</a>
+  </div>
+
+  <div class="right">
+    <span class="email">{{ email }}</span>
+    <button (click)="logout()">Logout</button>
+  </div>
+
+</nav>
+
+<div class="admin">
+ 
+
+  <h1 class="title">Admin Dashboard</h1>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-card">
+      <h2>{{ usersCount }}</h2>
+      <p>Usuários</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>{{ productsCount }}</h2>
+      <p>Produtos adquiridos</p>
     </div>
   </div>
 
   <!-- LOADING -->
   <div *ngIf="loading" class="loading">
-    <p>Loading data...</p>
+    Carregando dados...
   </div>
 
-  <!-- CONTENT -->
-  <div *ngIf="!loading">
+  <!-- EMPTY -->
+  <div *ngIf="!loading && users && users.length === 0" class="empty">
+    Nenhum usuário encontrado 🚫
+  </div>
 
-    <!-- STATS -->
-    <div class="cards">
-      <div class="card" routerLink="/users">
-        <h2>{{ usersCount }}</h2>
-        <p>Users</p>
+  <!-- USERS -->
+  <div class="grid" *ngIf="!loading && users && users.length > 0">
+
+    <div class="card" *ngFor="let user of users; trackBy: trackByUser">
+
+      <h3>{{ user.name }}</h3>
+      <p>{{ user.email }}</p>
+
+      <span class="role">{{ user.role }}</span>
+
+      <div class="actions">
+        <button (click)="viewUser(user)">Ver</button>
+        <button class="danger" (click)="deleteUser(user.id)">Eliminar</button>
       </div>
 
-      <div class="card" routerLink="/products">
-        <h2>{{ productsCount }}</h2>
-        <p>Products</p>
-      </div>
-    </div>
-
-    <!-- QUICK ACTIONS -->
-    <div class="actions">
-      <h3>Quick Actions</h3>
-
-      <div class="action-buttons">
-        <button routerLink="/products">➕ Add Product</button>
-        <button routerLink="/users">👤 Manage Users</button>
-      </div>
     </div>
 
   </div>
 
 </div>
+
+<!-- MODAL -->
+<div class="modal" *ngIf="selectedUser">
+
+  <div class="modal-content">
+
+    <h2>{{ selectedUser.name }}</h2>
+    <p>{{ selectedUser.email }}</p>
+
+    <h4>Produtos:</h4>
+
+    <div *ngIf="selectedUser.products?.length; else noProducts">
+      <div class="product" *ngFor="let p of selectedUser.products">
+        {{ p.name }}
+      </div>
+    </div>
+
+    <ng-template #noProducts>
+      <p>Sem produtos</p>
+    </ng-template>
+
+    <button (click)="closeModal()">Fechar</button>
+
+  </div>
+
+</div> 
+
+
+

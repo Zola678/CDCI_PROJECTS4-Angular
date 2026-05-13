@@ -1,36 +1,117 @@
+/* PAGE (OPENBOX) */
 .page {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background: #f9fafb;
+  color: #111827;
+  padding: 40px;
+  font-family: 'Inter', sans-serif;
 }
 
-h1 {
-  margin-bottom: 20px;
+/* TITLE */
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 25px;
 }
 
+/* STATES */
+.loading,
+.empty {
+  text-align: center;
+  margin-top: 40px;
+  color: #6b7280;
+}
+
+/* TABLE WRAPPER */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* TABLE (OPEN BOX STYLE) */
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  background: white;
+  border: 1px solid #e5e7eb;
+
+  border-radius: 14px;
+  overflow: hidden;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
 }
 
-th, td {
-  padding: 10px;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-}
-
-th {
+/* HEADER */
+thead {
   background: #f3f4f6;
 }
 
+th {
+  text-align: left;
+  padding: 14px;
+  font-size: 13px;
+  color: #374151;
+  font-weight: 600;
+}
+
+/* ROWS */
+td {
+  padding: 14px;
+  border-top: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #111827;
+}
+
+tr:hover {
+  background: #f9fafb;
+  transition: 0.2s;
+}
+
+/* ROLE BADGE (OPENBOX STYLE) */
+.role {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.role.admin {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* BUTTON (PRIMARY OPENBOX) */
 button {
-  background: #ef4444;
+  border: 1px solid #2563eb;
+  background: #2563eb;
   color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 5px;
+
+  padding: 6px 12px;
+  border-radius: 8px;
+
   cursor: pointer;
+  font-size: 13px;
+
+  transition: 0.2s;
 }
 
 button:hover {
-  background: #dc2626;
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+/* DANGER BUTTON (DELETE) */
+button.danger {
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+}
+
+button.danger:hover {
+  background: #ef4444;
+  color: white;
 }

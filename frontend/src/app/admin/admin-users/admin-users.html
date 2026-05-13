@@ -1,29 +1,90 @@
-<div class="page">
 
-  <h1>Users</h1>
 
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Action</th>
-      </tr>
-    </thead>
+<!-- CONTAINER -->
+<div class="admin">
+<!-- NAVBAR -->
+<nav class="navbar">
 
-    <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.role }}</td>
-        <td>
-          <button (click)="deleteUser(user.id)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="brand">
+    TechFlow Admin
+  </div>
+
+  <div class="links">
+    <a routerLink="/admin">Dashboard</a>
+    <a routerLink="/admin/users" class="active">Users</a>
+    <a routerLink="/admin/products">Products</a>
+  </div>
+
+  <div class="right">
+    <button routerLink="/admin">⬅ Back</button>
+  </div>
+
+</nav>
+  <h1 class="title">Users Management</h1>
+
+  <!-- LOADING -->
+  <div *ngIf="loading" class="loading">
+    Carregando utilizadores...
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <!-- EMPTY -->
+  <div *ngIf="!loading && users.length === 0" class="empty">
+    Nenhum utilizador encontrado 🚫
+  </div>
+
+  <!-- GRID -->
+  <div class="grid" *ngIf="!loading && users.length > 0">
+
+    <div class="card" *ngFor="let user of users; trackBy: trackByUser">
+
+      <h3>{{ user.name }}</h3>
+      <p>{{ user.email }}</p>
+
+      <span class="role">{{ user.role }}</span>
+
+      <div class="actions">
+
+        <button (click)="viewUser(user)">Ver</button>
+
+        <button class="danger" (click)="deleteUser(user.id)">
+          Eliminar
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" *ngIf="selectedUser">
+
+  <div class="modal-content">
+
+    <h2>{{ selectedUser.name }}</h2>
+    <p>{{ selectedUser.email }}</p>
+
+    <h4>Produtos:</h4>
+
+    <div *ngIf="selectedUser.products?.length; else noProducts">
+      <div class="product" *ngFor="let p of selectedUser.products">
+        {{ p.name }}
+      </div>
+    </div>
+
+    <ng-template #noProducts>
+      <p>Sem produtos</p>
+    </ng-template>
+
+    <button (click)="closeModal()">Fechar</button>
+
+  </div>
 
 </div>

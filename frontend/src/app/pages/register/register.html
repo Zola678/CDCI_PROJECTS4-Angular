@@ -1,5 +1,13 @@
 <div class="auth-container">
 
+  <div class="bg-image"></div>
+  <div class="overlay"></div>
+
+  <!-- 🔙 BACK BUTTON -->
+  <button class="back-btn" routerLink="/login">
+    ← Back
+  </button>
+
   <div class="auth-card">
 
     <h1>Create account</h1>
@@ -35,12 +43,12 @@
         name="confirmPassword"
       />
 
-      <!-- erro -->
+      <!-- error -->
       <div *ngIf="error" class="error">
         {{ error }}
       </div>
 
-      <!-- sucesso -->
+      <!-- success -->
       <div *ngIf="success" class="success">
         {{ success }}
       </div>
@@ -54,9 +62,8 @@
 
     <div class="footer">
       <span>Already have an account?</span>
-      <a routerLink="/login">Login</a>
+      <a routerLink="/login" class="link-login">Login</a>
     </div>
 
   </div>
-
 </div>

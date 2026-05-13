@@ -1,42 +1,219 @@
-.home {
-  font-family: Arial, sans-serif;
+/* RESET GLOBAL */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.navbar {
+/* BASE */
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: 'Satoshi', sans-serif;
+  background: #f6f7fb;
+  color: #111827;
+}
+
+/* HEADINGS */
+h1, h2, h3 {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* HERO CONTAINER */
+.hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+/* BACKGROUND (OPENBOX LIGHT LAYER) */
+.bg-image {
+  position: absolute;
+  inset: 0;
+
+  background-image: url('image1.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  filter: blur(0px) brightness(1.05);
+  transform: scale(1.05);
+
+  z-index: 0;
+
+  animation: zoom 25s ease-in-out infinite;
+}
+
+/* OVERLAY (SOFT WHITE LAYER) */
+.overlay {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0.92),
+    rgba(255,255,255,0.75)
+  );
+
+  z-index: 1;
+}
+
+/* NAVBAR (OPENBOX STYLE) */
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  z-index: 3;
+
   display: flex;
   justify-content: space-between;
-  padding: 15px 30px;
-  background: #1e3a8a;
-  color: white;
+  align-items: center;
+
+  padding: 18px 40px;
+
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(10px);
+
+  border-bottom: 1px solid #e5e7eb;
 }
 
+/* LOGO */
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* LINKS */
 .links a {
-  margin-left: 15px;
-  color: white;
+  margin-left: 20px;
   text-decoration: none;
+  color: #6b7280;
+  font-weight: 500;
+  transition: 0.2s;
 }
 
-.hero {
-  text-align: center;
-  padding: 80px 20px;
+.links a:hover {
+  color: #2563eb;
 }
 
-.hero h1 {
-  font-size: 40px;
-  color: #1e3a8a;
-}
-
-.hero p {
-  color: #64748b;
-  margin-top: 10px;
-}
-
-.btn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 10px 20px;
+/* BOTÃO NAV */
+.links .btn {
+  padding: 8px 14px;
+  border-radius: 10px;
   background: #2563eb;
   color: white;
-  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* CONTENT */
+.content {
+  position: relative;
+  z-index: 2;
+
+  text-align: center;
+  max-width: 720px;
+  padding: 20px;
+}
+
+/* TITULO */
+.content h1 {
+  font-size: 64px;
+  line-height: 1.1;
+  color: #111827;
+}
+
+/* GLOW (SUAVE OPENBOX) */
+.glow {
+  color: #2563eb;
+  text-shadow: 0 10px 30px rgba(37,99,235,0.2);
+}
+
+/* TEXTO */
+.content p {
+  margin-top: 20px;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+/* ACTIONS */
+.actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* PRIMARY BUTTON */
+.btn-primary {
+  background: #2563eb;
+  border: none;
+  padding: 12px 22px;
+  color: white;
+  border-radius: 10px;
   text-decoration: none;
+  transition: 0.2s;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+/* OUTLINE BUTTON */
+.btn-outline {
+  border: 1px solid #2563eb;
+  padding: 12px 22px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #2563eb;
+  transition: 0.2s;
+}
+
+.btn-outline:hover {
+  background: #2563eb;
+  color: white;
+}
+
+/* ANIMAÇÃO */
+@keyframes zoom {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+
+  .content h1 {
+    font-size: 38px;
+  }
+
+  .nav {
+    padding: 15px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .content h1 {
+    font-size: 28px;
+  }
+
+  .content p {
+    font-size: 14px;
+  }
 }

@@ -1,26 +1,211 @@
-.settings {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+
+/* =========================
+   🌐 BASE RESET
+========================= */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.box {
-  margin-top: 20px;
+/* =========================
+   🌙 DARK MODE (OPEN BOX)
+========================= */
+body.dark {
+  background: #0b0f1a;
+  color: #ffffff;
+}
+
+/* =========================
+   ☀️ LIGHT MODE (OPEN BOX SaaS)
+========================= */
+body.light {
+  background: #f5f7fb;
+  color: #1a1f2e;
+}
+
+/* =========================
+   🧊 NAVBAR GLASS
+========================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px 28px;
+
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(14px);
+
+  border-bottom: 1px solid rgba(31,182,255,0.15);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+body.dark .navbar {
+  background: rgba(11,15,26,0.75);
+  border-bottom: 1px solid rgba(31,182,255,0.2);
+}
+
+.brand {
+  color: #1fb6ff;
+  font-weight: 700;
+}
+
+/* =========================
+   🔗 LINKS
+========================= */
+.links a {
+  margin: 0 10px;
+  text-decoration: none;
+
+  color: #666;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+body.dark .links a {
+  color: #aaa;
+}
+
+.links a.active {
+  color: #1fb6ff;
+}
+
+/* =========================
+   📦 CONTAINER
+========================= */
+.container {
+  padding: 120px 40px 40px;
+}
+
+/* =========================
+   🎯 TITLE
+========================= */
+.title {
+  font-size: 30px;
+  font-weight: 700;
+
+  margin-bottom: 25px;
+  color: inherit;
+}
+
+/* =========================
+   🧊 CARD (OPEN BOX EFFECT)
+========================= */
+.card {
+  padding: 20px;
+  border-radius: 14px;
+
+  background: white;
+  border: 1px solid rgba(0,0,0,0.06);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+
+  transition: 0.3s;
+}
+
+body.dark .card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(31,182,255,0.2);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(31,182,255,0.15);
+}
+
+/* =========================
+   🏷 ROLE BADGE
+========================= */
+.role {
+  display: inline-block;
+  margin-top: 10px;
+
+  padding: 4px 10px;
+  border-radius: 20px;
+
+  background: #1fb6ff;
+  color: white;
+  font-size: 12px;
+}
+
+/* =========================
+   ⚙ SETTINGS OPEN BOX LIST
+========================= */
+.settings {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 300px;
+  gap: 12px;
 }
 
-input {
-  padding: 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 15px;
+  border-radius: 10px;
+
+  background: white;
+  border: 1px solid rgba(0,0,0,0.06);
+
+  transition: 0.3s;
 }
 
+body.dark .setting-item {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(31,182,255,0.2);
+}
+
+.setting-item:hover {
+  transform: translateX(4px);
+}
+
+/* =========================
+   🔴 DANGER STATE
+========================= */
+.setting-item.danger {
+  border-color: #ff4d4d;
+}
+
+.setting-item.danger h3 {
+  color: #ff4d4d;
+}
+
+/* =========================
+   🚀 BUTTONS
+========================= */
 button {
-  background: #2563eb;
+  padding: 8px 12px;
+  border-radius: 8px;
+
+  border: 1px solid #1fb6ff;
+  background: #1fb6ff;
   color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(31,182,255,0.25);
+}
+
+.setting-item.danger button {
+  background: transparent;
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+}
+
+.setting-item.danger button:hover {
+  background: #ff4d4d;
+  color: white;
 }

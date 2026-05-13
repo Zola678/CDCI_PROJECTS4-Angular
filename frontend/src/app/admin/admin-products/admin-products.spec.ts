@@ -1,19 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { AdminProducts } from './admin-products';
+import { AdminProductsComponent } from './admin-products';
 
-describe('AdminProducts', () => {
-  let component: AdminProducts;
-  let fixture: ComponentFixture<AdminProducts>;
+describe('AdminProductsComponent', () => {
+  let component: AdminProductsComponent;
+  let fixture: ComponentFixture<AdminProductsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdminProducts]
-    })
-    .compileComponents();
+      imports: [
+        AdminProductsComponent,
+        HttpClientTestingModule
+      ]
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(AdminProducts);
+    fixture = TestBed.createComponent(AdminProductsComponent);
     component = fixture.componentInstance;
+
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 

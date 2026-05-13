@@ -1,55 +1,62 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+
+interface Purchase {
+  id: number;
+  name: string;
+  date: string;
+}
 
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink],
   templateUrl: './user-dashboard.html',
   styleUrls: ['./user-dashboard.css']
 })
-export class UserDashboardComponent {
+export class UserDashboardComponent implements OnInit {
 
-  email = localStorage.getItem('email') || 'User';
+  email = '';
 
-  products: any[] = [];
-  purchases: any[] = [];
+  servicesCount = 0;
+  productsCount = 0;
 
-  limit = 10;
+  purchases: Purchase[] = [];
 
-  constructor(private router: Router) {
-    this.loadData();
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+
+    this.email = localStorage.getItem('email') || 'user@techflow.com';
+
+    this.loadPurchases();
+
+    // 🔥 escuta mudanças de produtos em outras páginas
+    window.addEventListener('products-updated', () => {
+      this.loadPurchases();
+    });
   }
 
-  loadData() {
-    this.products = JSON.parse(localStorage.getItem('products') || '[]');
-    this.purchases = JSON.parse(localStorage.getItem('purchases') || '[]');
+  loadPurchases(): void {
+
+    const data = localStorage.getItem('purchases');
+
+    this.purchases = data ? JSON.parse(data) : [];
+
+    this.productsCount = this.purchases.length;
   }
 
-  @HostListener('window:products-updated')
-  refresh() {
-    this.loadData();
+  deletePurchase(id: number): void {
+
+    this.purchases = this.purchases.filter(p => p.id !== id);
+
+    localStorage.setItem('purchases', JSON.stringify(this.purchases));
+
+    window.dispatchEvent(new Event('products-updated'));
   }
 
-  // 📊 métricas
-  get servicesCount(): number {
-    return 2; // mock (podes ligar à API depois)
-  }
-
-  get productsCount(): number {
-    return this.products.length;
-  }
-
-  get used(): number {
-    return this.purchases.length;
-  }
-
-  get progress(): number {
-    return this.limit === 0 ? 0 : Math.min(100, (this.used / this.limit) * 100);
-  }
-
-  logout() {
+  logout(): void {
     localStorage.clear();
     this.router.navigate(['/login']);
   }
