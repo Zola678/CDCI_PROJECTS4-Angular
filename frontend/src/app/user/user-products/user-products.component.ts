@@ -1,97 +1,84 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+
+interface Product {
+  id: number;
+  name: string;
+  description?: string;
+  price: number;
+  category: 'service' | 'hardware';
+}
 
 @Component({
   selector: 'app-user-products',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    RouterLinkActive
-  ],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './user-products.html',
   styleUrls: ['./user-products.css']
 })
-export class UserProductsComponent {
+export class UserProductsComponent implements OnInit {
 
-  products: any[] = [];
+  // Serviços e Produtos Fixos de Multimédia e Tecnologia
+  multimediaItems: Product[] = [
+    { id: 101, name: 'Edição de Vídeo Profissional', description: 'Edição cinematográfica para YouTube, Redes Sociais ou Eventos.', price: 250, category: 'service' },
+    { id: 102, name: 'Gestão de Marketing Digital', description: 'Gestão completa de tráfego pago e redes sociais.', price: 500, category: 'service' },
+    { id: 103, name: 'Design Gráfico & Branding', description: 'Criação de logotipos e identidade visual de alto impacto.', price: 350, category: 'service' },
+    { id: 104, name: 'Placa de Vídeo RTX 4090', description: 'A melhor performance para edição e renderização 3D.', price: 1800, category: 'hardware' },
+    { id: 105, name: 'Monitor 4K Design Pro', description: 'Cores ultra precisas para designers e editores.', price: 800, category: 'hardware' },
+    { id: 106, name: 'Licença Adobe Creative Cloud', description: 'Acesso total a todas as ferramentas Adobe (1 ano).', price: 600, category: 'hardware' }
+  ];
 
-  newProduct = {
-    name: '',
-    description: '',
-    price: 0
-  };
+  purchasedItems: any[] = [];
+  successMessage: string = '';
 
-  constructor() {
-    this.load();
+  constructor(private http: HttpClient) {}
 
-    // 🔥 sync automático quando houver mudanças
-    window.addEventListener('products-updated', () => {
-      this.load();
-    });
+  ngOnInit(): void {
+    // Não carregamos mais do localStorage, mas podemos manter para histórico offline se quiseres
+    // this.loadPurchases(); 
   }
 
-  // 📦 carregar produtos
-  load(): void {
-    const data = localStorage.getItem('products');
-    this.products = data ? JSON.parse(data) : [];
-  }
-
-  // ➕ criar produto
-  createProduct(): void {
-
-    if (!this.newProduct.name || this.newProduct.price <= 0) return;
-
-    const product = {
-      id: Date.now(),
-      name: this.newProduct.name,
-      description: this.newProduct.description,
-      price: this.newProduct.price
+  // 🔐 Headers com Token
+  private getHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     };
-
-    this.products.push(product);
-    this.sync();
-
-    this.newProduct = { name: '', description: '', price: 0 };
   }
 
-  // 🗑 eliminar produto
-  deleteProduct(id: number): void {
+  buy(item: Product): void {
+    
+    this.successMessage = '';
 
-    this.products = this.products.filter(p => p.id !== id);
-    this.sync();
-  }
+    // 🔥 Integração REAL com Backend
+    this.http.post('http://127.0.0.1:8000/api/products', {
+      name: item.name,
+      description: item.description || '',
+      quantity: 1,
+      price: item.price
+    }, this.getHeaders()).subscribe({
+      next: (res: any) => {
+        this.successMessage = `Sucesso! Você adquiriu: ${item.name}`;
+        
+        // Auto-hide message
+        setTimeout(() => this.successMessage = '', 4000);
 
-  // 🛒 comprar produto
-  buy(product: any): void {
-
-    const purchases = JSON.parse(localStorage.getItem('purchases') || '[]');
-
-    purchases.push({
-      id: Date.now(),
-      name: product.name,
-      date: new Date().toLocaleString()
+        // Notifica dashboard
+        window.dispatchEvent(new Event('products-updated'));
+      },
+      error: (err) => {
+        console.error('Erro na compra:', err);
+        alert('Erro ao processar a compra. Tente novamente.');
+      }
     });
-
-    localStorage.setItem('purchases', JSON.stringify(purchases));
-
-    // 🔥 padrão correto (UNIFICADO)
-    window.dispatchEvent(new Event('products-updated'));
   }
 
-  // 🔄 sincronizar storage
-  sync(): void {
-
-    localStorage.setItem('products', JSON.stringify(this.products));
-
-    window.dispatchEvent(new Event('products-updated'));
-  }
-
-  // ⚡ performance
-  trackById(index: number, item: any): number {
+  trackById(index: number, item: Product): number {
     return item.id;
   }
 }

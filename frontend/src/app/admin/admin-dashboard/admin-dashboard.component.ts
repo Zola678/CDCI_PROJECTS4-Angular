@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink, Router } from '@angular/router';
+
+interface Product {
+  id: number;
+  name: string;
+}
 
 interface User {
   id: number;
   name: string;
   email: string;
   role: string;
-  products?: any[];
+  products?: Product[];
 }
 
 @Component({
@@ -25,71 +30,125 @@ export class AdminDashboardComponent implements OnInit {
   usersCount = 0;
   productsCount = 0;
 
-  loading = true;
+  loading = false;
+  error = '';
+
   selectedUser: User | null = null;
 
   email = '';
 
+  private API_URL = 'http://127.0.0.1:8000/api/admin/users';
+
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef // 🔥 resolve problema de render
   ) {}
 
   ngOnInit(): void {
-    this.email = localStorage.getItem('email') || 'admin@techflow.com';
+    this.loadUserSession();
     this.loadData();
   }
 
+  // 🔐 sessão
+  loadUserSession(): void {
+    this.email = localStorage.getItem('email') || 'admin@techflow.com';
+  }
+
+  // 🔐 obter headers com token
+  private getHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    };
+  }
+
+  // 📡 carregar dados
   loadData(): void {
     this.loading = true;
+    this.error = '';
 
-    this.http.get<any>('http://127.0.0.1:8000/api/admin/users')
+    this.http.get<User[]>(this.API_URL, this.getHeaders())
       .subscribe({
         next: (res) => {
 
+          // 🔥 garante array válido
           this.users = Array.isArray(res) ? res : [];
 
+          // 📊 stats
           this.usersCount = this.users.length;
 
-          this.productsCount = this.users.reduce((acc, user) => {
-            return acc + (user.products?.length || 0);
+          this.productsCount = this.users.reduce((total, user) => {
+            return total + (user.products?.length || 0);
           }, 0);
 
           this.loading = false;
+
+          // 🔥 força render (resolve teu bug principal)
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error(err);
+          this.error = 'Erro ao carregar dados';
           this.loading = false;
+
+          this.cdr.detectChanges();
         }
       });
   }
 
+  // 🗑 eliminar usuário
   deleteUser(userId: number): void {
 
-    if (!confirm('Tens certeza que queres eliminar este usuário?')) return;
+    const confirmDelete = confirm('Tens certeza que queres eliminar este usuário?');
+    if (!confirmDelete) return;
 
-    this.http.delete(`http://127.0.0.1:8000/api/admin/users/${userId}`)
+    this.http.delete(`${this.API_URL}/${userId}/force`, this.getHeaders())
       .subscribe({
         next: () => {
+
+          // 🔥 remove localmente (UX rápida)
           this.users = this.users.filter(u => u.id !== userId);
-          this.usersCount = this.users.length;
+
+          // 🔄 atualiza stats
+          this.updateStats();
+
+          this.cdr.detectChanges();
         },
-        error: (err) => console.error(err)
+        error: (err) => {
+          console.error(err);
+          this.error = 'Erro ao eliminar utilizador';
+        }
       });
   }
 
+  // 👁 ver usuário
   viewUser(user: User): void {
     this.selectedUser = user;
   }
 
+  // ❌ fechar modal
   closeModal(): void {
     this.selectedUser = null;
   }
 
-  trackByUser(index: number, user: User) {
+  // 📊 atualizar stats
+  updateStats(): void {
+    this.usersCount = this.users.length;
+
+    this.productsCount = this.users.reduce((total, user) => {
+      return total + (user.products?.length || 0);
+    }, 0);
+  }
+
+  // ⚡ performance
+  trackByUser(index: number, user: User): number {
     return user.id;
   }
 
+  // 🚪 logout
   logout(): void {
     localStorage.clear();
     this.router.navigate(['/login']);

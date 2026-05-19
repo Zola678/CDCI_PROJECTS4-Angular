@@ -1,69 +1,70 @@
-<div class="auth-container">
-
-  <div class="bg-image"></div>
-  <div class="overlay"></div>
-
-  <!-- 🔙 BACK BUTTON -->
-  <button class="back-btn" routerLink="/login">
-    ← Back
-  </button>
-
-  <div class="auth-card">
-
-    <h1>Create account</h1>
-    <p>Register a new account</p>
+<div class="auth-page">
+  <div class="auth-card reveal visible">
+    <div class="logo" routerLink="/">OPEN BOX</div>
+    <h2>Criar nova conta</h2>
+    <p class="subtitle">Junte-se à elite da tecnologia e multimédia</p>
 
     <form (ngSubmit)="onRegister()">
-
-      <input
-        type="text"
-        placeholder="Full name"
-        [(ngModel)]="name"
-        name="name"
-      />
-
-      <input
-        type="email"
-        placeholder="Email"
-        [(ngModel)]="email"
-        name="email"
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        [(ngModel)]="password"
-        name="password"
-      />
-
-      <input
-        type="password"
-        placeholder="Confirm password"
-        [(ngModel)]="confirmPassword"
-        name="confirmPassword"
-      />
-
-      <!-- error -->
-      <div *ngIf="error" class="error">
-        {{ error }}
+      <div class="form-group">
+        <label>Nome Completo</label>
+        <input
+          type="text"
+          placeholder="O seu nome"
+          [(ngModel)]="name"
+          name="name"
+          required
+        />
       </div>
 
-      <!-- success -->
-      <div *ngIf="success" class="success">
-        {{ success }}
+      <div class="form-group">
+        <label>E-mail</label>
+        <input
+          type="email"
+          placeholder="exemplo@openbox.com"
+          [(ngModel)]="email"
+          name="email"
+          required
+        />
       </div>
 
-      <button type="submit" [disabled]="loading">
-        <span *ngIf="!loading">Create account</span>
-        <span *ngIf="loading">Creating...</span>
+      <div class="form-group">
+        <label>Palavra-passe</label>
+        <input
+          type="password"
+          placeholder="Mínimo 6 caracteres"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Confirmar Palavra-passe</label>
+        <input
+          type="password"
+          placeholder="••••••••"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+        />
+      </div>
+
+      <button type="submit" [disabled]="loading" class="btn-primary">
+        <span *ngIf="!loading">Criar Conta</span>
+        <span *ngIf="loading">A criar...</span>
       </button>
-
     </form>
 
-    <div class="footer">
-      <span>Already have an account?</span>
-      <a routerLink="/login" class="link-login">Login</a>
+    <div class="error-msg" *ngIf="error">
+      {{ error }}
     </div>
 
+    <div class="success-msg" *ngIf="success">
+      {{ success }}
+    </div>
+
+    <div class="auth-footer">
+      Já tem uma conta? <a routerLink="/login">Fazer login</a>
+    </div>
   </div>
 </div>

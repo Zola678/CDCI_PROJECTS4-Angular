@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 
 interface User {
@@ -27,10 +27,22 @@ export class AdminUsersComponent implements OnInit {
 
   selectedUser: User | null = null;
 
-  constructor(private http: HttpClient) {}
+  private API_URL = 'http://127.0.0.1:8000/api/admin/users';
+
+  constructor(
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
+  }
+
+  private getHeaders() {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
   }
 
   loadUsers(): void {
@@ -38,19 +50,21 @@ export class AdminUsersComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.http.get<User[]>('http://127.0.0.1:8000/api/users')
+    this.http.get<User[]>(this.API_URL, { headers: this.getHeaders() })
       .subscribe({
         next: (data) => {
 
           this.users = Array.isArray(data) ? data : [];
 
           this.loading = false;
+          this.cdr.detectChanges();
         },
 
         error: (err) => {
           console.error(err);
           this.error = 'Erro ao carregar utilizadores';
           this.loading = false;
+          this.cdr.detectChanges();
         }
       });
   }
@@ -59,17 +73,18 @@ export class AdminUsersComponent implements OnInit {
 
     if (!confirm('Tens certeza que queres eliminar este utilizador?')) return;
 
-    this.http.delete(`http://127.0.0.1:8000/api/users/${id}`)
+    this.http.delete(`${this.API_URL}/${id}/force`, { headers: this.getHeaders() })
       .subscribe({
         next: () => {
 
           this.users = this.users.filter(u => u.id !== id);
-
+          this.cdr.detectChanges();
         },
 
         error: (err) => {
           console.error(err);
           this.error = 'Erro ao eliminar utilizador';
+          this.cdr.detectChanges();
         }
       });
   }

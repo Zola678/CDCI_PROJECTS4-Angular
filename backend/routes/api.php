@@ -15,12 +15,16 @@ Route::post('/login', [AuthController::class, 'login']);
 
 /*
 |--------------------------------------------------------------------------
-| PRODUCTS (USER)
+| USER AUTHENTICATED & ADMIN AREA
 |--------------------------------------------------------------------------
 */
+// 🔹 USER PRODUCTS
 Route::get('/products', [ProductController::class, 'index']);
 Route::post('/products', [ProductController::class, 'store']);
 Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+
+// 🔹 USER ACCOUNT
+Route::delete('/user/delete', [UserController::class, 'destroy']);
 
 /*
 |--------------------------------------------------------------------------

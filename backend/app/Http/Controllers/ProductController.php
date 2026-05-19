@@ -8,37 +8,6 @@ use App\Models\User;
 
 class ProductController extends Controller
 {
-    // 🔐 pegar user via token simples (ROBUSTO)
-    private function getUser($request)
-    {
-        $auth = $request->header('Authorization');
-
-        if (!$auth) {
-            return null;
-        }
-
-        // 🔥 remove "Bearer " se existir
-        $auth = str_replace('Bearer ', '', $auth);
-
-        // 🔥 decode seguro
-        $decoded = base64_decode($auth, true);
-
-        if (!$decoded) {
-            return null;
-        }
-
-        // 🔥 extrai email
-        $parts = explode('|', $decoded);
-        $email = $parts[0] ?? null;
-
-        if (!$email) {
-            return null;
-        }
-
-        // 🔥 busca user
-        return User::where('email', $email)->first();
-    }
-
     // 📦 LISTAR produtos do user logado
     public function index(Request $request)
     {
@@ -102,8 +71,8 @@ class ProductController extends Controller
             ], 404);
         }
 
-        // 🔐 só dono pode apagar
-        if ($product->user_id !== $user->id) {
+        // 🔐 só dono ou admin pode apagar
+        if ($user->role !== 'admin' && $product->user_id !== $user->id) {
             return response()->json([
                 'error' => 'Forbidden'
             ], 403);
@@ -114,5 +83,17 @@ class ProductController extends Controller
         return response()->json([
             'message' => 'Product deleted'
         ]);
+    }
+
+    // 🌐 LISTAR TODOS os produtos (Admin)
+    public function allProducts(Request $request)
+    {
+        $user = $this->getUser($request);
+
+        if (!$user || $user->role !== 'admin') {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return Product::with('user')->get();
     }
 }

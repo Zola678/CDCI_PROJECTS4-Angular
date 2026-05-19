@@ -1,80 +1,67 @@
-<!-- NAVBAR -->
 <nav class="navbar">
-
-  <div class="brand">
-    <span class="dot"></span>
-    TechFlow
-  </div>
-
+  <div class="logo">OPEN BOX</div>
   <div class="links">
-    <a routerLink="/user" routerLinkActive="active">Dashboard</a>
-    <a routerLink="/user/products" routerLinkActive="active">Products</a>
-    <a routerLink="/user/profile" routerLinkActive="active">Profile</a>
-    <a routerLink="/user/settings" routerLinkActive="active">Settings</a>
+    <a routerLink="/user">Painel</a>
+    <a routerLink="/user/products">Serviços & Produtos</a>
+    <a routerLink="/user/profile">Perfil</a>
+    <a routerLink="/user/settings" class="active">Definições</a>
   </div>
-
-  <div class="right">
-    <button (click)="goBack()">⬅ Back</button>
+  <div class="user-info">
+    <span>{{ user.email }}</span>
+    <button (click)="logout()" class="btn-logout">Sair</button>
   </div>
-
 </nav>
 
-<!-- PAGE -->
-<div class="container">
+<div class="settings-container reveal visible">
+  <header class="settings-header">
+    <h1>Definições de <span style="color: var(--primary)">Conta</span></h1>
+    <p>Personalize a sua experiência na plataforma Open Box.</p>
+  </header>
 
-  <h1 class="title">Settings</h1>
+  <div class="settings-grid">
+    <!-- Preferências -->
+    <div class="settings-section">
+      <h3>Preferências de Interface</h3>
+      <div class="setting-item">
+        <div class="info">
+          <span class="label">Modo Visual</span>
+          <span class="description">Alternar entre tema claro e escuro.</span>
+        </div>
+        <button (click)="toggleTheme()" class="btn-secondary">
+          {{ darkMode ? 'Ativar Modo Claro' : 'Ativar Modo Escuro' }}
+        </button>
+      </div>
+    </div>
 
-  <!-- PROFILE CARD -->
-  <div class="card">
+    <!-- Segurança -->
+    <div class="settings-section">
+      <h3>Segurança & Sessão</h3>
+      <div class="setting-item">
+        <div class="info">
+          <span class="label">Terminar Sessão</span>
+          <span class="description">Sair da conta em todos os dispositivos.</span>
+        </div>
+        <button (click)="logout()" class="btn-secondary">Sair Agora</button>
+      </div>
+    </div>
 
-    <h2>{{ user.name }}</h2>
-    <p>{{ user.email }}</p>
-
-    <span class="role">{{ user.role }}</span>
-
+    <!-- Zona de Perigo -->
+    <div class="settings-section danger-zone">
+      <h3>Zona de Perigo</h3>
+      <div class="setting-item">
+        <div class="info">
+          <span class="label">Apagar Conta</span>
+          <span class="description">Esta ação é permanente e apagará todos os seus dados.</span>
+        </div>
+        <button (click)="deleteAccount()" class="btn-danger" [disabled]="loading">
+          {{ loading ? 'A processar...' : 'Eliminar Conta' }}
+        </button>
+      </div>
+      <div class="error-msg" *ngIf="error">{{ error }}</div>
+    </div>
   </div>
 
-  <!-- SETTINGS -->
-  <div class="settings">
-
-    <!-- DARK MODE -->
-    <div class="setting-item">
-
-      <div>
-        <h3>Theme</h3>
-        <p>Dark / Light mode</p>
-      </div>
-
-      <button (click)="toggleTheme()">
-        {{ darkMode ? 'Dark Mode' : 'Light Mode' }}
-      </button>
-
-    </div>
-
-    <!-- LOGOUT -->
-    <div class="setting-item">
-
-      <div>
-        <h3>Session</h3>
-        <p>Logout from system</p>
-      </div>
-
-      <button (click)="logout()">Logout</button>
-
-    </div>
-
-    <!-- DELETE ACCOUNT -->
-    <div class="setting-item danger">
-
-      <div>
-        <h3>Danger Zone</h3>
-        <p>Delete your account permanently</p>
-      </div>
-
-      <button (click)="deleteAccount()">Delete</button>
-
-    </div>
-
+  <div class="footer-actions">
+    <button (click)="goBack()" class="btn-secondary">Voltar ao Painel</button>
   </div>
-
 </div>

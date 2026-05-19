@@ -1,81 +1,32 @@
-<!-- NAVBAR -->
 <nav class="navbar">
-
-  <div class="brand">
-    <span class="dot"></span>
-    TechFlow
-  </div>
-
+  <div class="logo">OPEN BOX</div>
   <div class="links">
-    <a routerLink="/user" routerLinkActive="active">Dashboard</a>
-    <a routerLink="/user/products" routerLinkActive="active">Products</a>
-    <a routerLink="/user/profile" routerLinkActive="active">Profile</a>
-    <a routerLink="/user/settings" routerLinkActive="active">Settings</a>
+    <a routerLink="/user">Painel</a>
+    <a routerLink="/user/products" class="active">Serviços & Produtos</a>
+    <a routerLink="/user/profile">Perfil</a>
   </div>
-
-  <div class="right">
-    <button routerLink="/user">⬅ Back</button>
-  </div>
-
 </nav>
 
-<!-- PAGE -->
-<div class="container">
+<div class="container reveal visible">
+  <header class="page-header">
+    <h1>Catálogo de <span style="color: var(--primary)">Multimédia & Tecnologia</span></h1>
+    <p>Soluções de elite para os seus projetos digitais.</p>
+  </header>
 
-  <h1 class="title">My Products</h1>
-
-  <!-- FORM -->
-  <div class="form-card">
-
-    <input
-      type="text"
-      placeholder="Product name"
-      [(ngModel)]="newProduct.name"
-    />
-
-    <input
-      type="text"
-      placeholder="Description"
-      [(ngModel)]="newProduct.description"
-    />
-
-    <input
-      type="number"
-      placeholder="Price"
-      [(ngModel)]="newProduct.price"
-    />
-
-    <button (click)="createProduct()">Create Product</button>
-
+  <div class="alert-success" *ngIf="successMessage">
+    <span class="icon">✅</span> {{ successMessage }}
   </div>
 
-  <!-- EMPTY -->
-  <div *ngIf="products.length === 0" class="empty">
-    Nenhum produto criado ainda 🚫
-  </div>
-
-  <!-- GRID -->
   <div class="grid">
-
-    <div class="card" *ngFor="let p of products; trackBy: trackById">
-
-      <h3>{{ p.name }}</h3>
-      <p>{{ p.description }}</p>
-
-      <span class="price">{{ p.price }} $</span>
-
-      <div class="actions">
-
-        <button class="buy" (click)="buy(p)">Buy</button>
-
-        <button class="delete" (click)="deleteProduct(p.id)">
-          Delete
-        </button>
-
+    <div class="card product-card" *ngFor="let item of multimediaItems; trackBy: trackById">
+      <div class="category-tag">{{ item.category === 'service' ? 'Serviço' : 'Hardware' }}</div>
+      <h3>{{ item.name }}</h3>
+      <p>{{ item.description }}</p>
+      
+      <div class="card-footer">
+        <span class="price">{{ item.price | currency:'USD' }}</span>
+        <button class="btn-primary" (click)="buy(item)">Adquirir</button>
       </div>
-
     </div>
-
   </div>
-
 </div>

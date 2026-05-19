@@ -1,42 +1,49 @@
-<!-- NAVBAR (IGUAL USER DASHBOARD) -->
 <nav class="navbar">
-
-  <div class="brand">
-    <span class="dot"></span>
-    TechFlow
-  </div>
-
+  <div class="logo">OPEN BOX</div>
   <div class="links">
-    <a routerLink="/user" routerLinkActive="active">Dashboard</a>
-    <a routerLink="/user/products" routerLinkActive="active">Products</a>
-    <a routerLink="/user/profile" routerLinkActive="active">Profile</a>
-    <a routerLink="/user/settings" routerLinkActive="active">Settings</a>
+    <a routerLink="/user">Painel</a>
+    <a routerLink="/user/products">Serviços & Produtos</a>
+    <a routerLink="/user/profile" class="active">Perfil</a>
   </div>
-
-  <div class="right">
-    <span class="email">{{ user.email }}</span>
-    <button (click)="logout()">Logout</button>
+  <div class="user-info">
+    <span>{{ user.email }}</span>
+    <button (click)="logout()" class="btn-logout">Sair</button>
   </div>
-
 </nav>
 
-<!-- PROFILE -->
-<div class="profile-container">
+<div class="profile-container reveal visible">
+  <header class="profile-header">
+    <h1>O Seu <span style="color: var(--primary)">Perfil Profissional</span></h1>
+    <p>Informações da sua conta na Open Box Corporation.</p>
+  </header>
 
-  <h1 class="title">My Profile</h1>
-
-  <div class="card">
-
-    <div class="avatar">
+  <div class="profile-card">
+    <div class="avatar-large">
       {{ user.name.charAt(0).toUpperCase() }}
     </div>
+    
+    <div class="profile-details">
+      <div class="detail-group">
+        <label>Nome Completo</label>
+        <div class="value">{{ user.name }}</div>
+      </div>
 
-    <h2>{{ user.name }}</h2>
+      <div class="detail-group">
+        <label>Endereço de E-mail</label>
+        <div class="value">{{ user.email }}</div>
+      </div>
 
-    <p class="email">{{ user.email }}</p>
+      <div class="detail-group">
+        <label>Nível de Acesso</label>
+        <div class="value">
+          <span class="role-tag" [class.admin]="user.role === 'admin'">{{ user.role }}</span>
+        </div>
+      </div>
+    </div>
 
-    <span class="role">{{ user.role }}</span>
-
+    <div class="profile-actions">
+      <button class="btn-secondary" (click)="goBack()">Voltar ao Painel</button>
+      <button routerLink="/user/settings" class="btn-primary">Definições da Conta</button>
+    </div>
   </div>
-
 </div>

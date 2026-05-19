@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth-guard';
+import { adminGuard } from './guards/admin-guard';
 
 /* =========================
    PAGES
@@ -37,18 +39,18 @@ export const routes: Routes = [
      ADMIN ROUTES
   ========================= */
 
-  { path: 'admin', component: AdminDashboardComponent },
-  { path: 'admin/users', component: AdminUsersComponent },
-  { path: 'admin/products', component: AdminProductsComponent },
+  { path: 'admin', component: AdminDashboardComponent, canActivate: [adminGuard] },
+  { path: 'admin/users', component: AdminUsersComponent, canActivate: [adminGuard] },
+  { path: 'admin/products', component: AdminProductsComponent, canActivate: [adminGuard] },
 
   /* =========================
      USER ROUTES
   ========================= */
 
-  { path: 'user', component: UserDashboardComponent },
-  { path: 'user/products', component: UserProductsComponent },
-  { path: 'user/profile', component: UserProfileComponent },
-  { path: 'user/settings', component: UserSettingsComponent },
+  { path: 'user', component: UserDashboardComponent, canActivate: [authGuard] },
+  { path: 'user/products', component: UserProductsComponent, canActivate: [authGuard] },
+  { path: 'user/profile', component: UserProfileComponent, canActivate: [authGuard] },
+  { path: 'user/settings', component: UserSettingsComponent, canActivate: [authGuard] },
 
   /* =========================
      FALLBACK

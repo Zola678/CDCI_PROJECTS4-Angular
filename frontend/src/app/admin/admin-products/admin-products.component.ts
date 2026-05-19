@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
@@ -25,47 +25,100 @@ export class AdminProductsComponent implements OnInit {
 
   products: Product[] = [];
 
-  loading = true;
+  loading = false;
   error = '';
 
-  constructor(private http: HttpClient) {}
+  private API_URL = 'http://127.0.0.1:8000/api/admin/products';
+
+  constructor(
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef // 🔥 resolve render bug
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts();
+
+    // 🔥 escuta updates vindos de outras páginas (ex: user dashboard)
+    window.addEventListener('products-updated', () => {
+      this.loadProducts();
+    });
   }
 
+  // 🔐 obter headers com token
+  private getHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    };
+  }
+
+  // 📦 carregar produtos
   loadProducts(): void {
 
     this.loading = true;
     this.error = '';
 
-    this.http.get<Product[]>('http://127.0.0.1:8000/api/products')
+    this.http.get<any>(this.API_URL, this.getHeaders())
       .subscribe({
-        next: (data) => {
-          this.products = Array.isArray(data) ? data : [];
+        next: (res) => {
+
+          console.log('API RESPONSE:', res); // 🔍 debug
+
+          /**
+           * 🔥 SUPORTE A VÁRIOS FORMATOS DE API
+           * Laravel pode devolver:
+           * - array direto
+           * - { data: [...] }
+           */
+          if (Array.isArray(res)) {
+            this.products = res;
+          } else if (res?.data && Array.isArray(res.data)) {
+            this.products = res.data;
+          } else {
+            this.products = [];
+          }
+
           this.loading = false;
+
+          // 🔥 força render (resolve teu bug)
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error(err);
           this.error = 'Erro ao carregar produtos';
           this.loading = false;
+
+          this.cdr.detectChanges();
         }
       });
   }
 
+  // 🗑 eliminar produto
   deleteProduct(id: number): void {
 
-    if (!confirm('Tens certeza que queres eliminar este produto?')) return;
+    const confirmDelete = confirm('Tens certeza que queres eliminar este produto?');
+    if (!confirmDelete) return;
 
-    this.http.delete(`http://127.0.0.1:8000/api/products/${id}`)
+    this.http.delete(`${this.API_URL.replace('/admin', '')}/${id}`, this.getHeaders())
       .subscribe({
         next: () => {
+
+          // 🔥 update imediato na UI
           this.products = this.products.filter(p => p.id !== id);
+
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error(err);
           this.error = 'Erro ao eliminar produto';
         }
       });
+  }
+
+  // ⚡ performance (IMPORTANTE para grid)
+  trackByProduct(index: number, product: Product): number {
+    return product.id;
   }
 }

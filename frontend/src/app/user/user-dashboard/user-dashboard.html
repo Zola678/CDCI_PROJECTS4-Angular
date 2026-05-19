@@ -1,69 +1,52 @@
-<!-- NAVBAR -->
 <nav class="navbar">
-
-  <div class="brand">
-    <span class="dot"></span>
-    TechFlow
-  </div>
-
+  <div class="logo">OPEN BOX</div>
   <div class="links">
-    <a routerLink="/user" routerLinkActive="active">Dashboard</a>
-    <a routerLink="/user/products" routerLinkActive="active">Products</a>
-    <a routerLink="/user/profile" routerLinkActive="active">Profile</a>
-    <a routerLink="/user/settings" routerLinkActive="active">Settings</a>
+    <a routerLink="/user" routerLinkActive="active">Painel</a>
+    <a routerLink="/user/products" routerLinkActive="active">Serviços & Produtos</a>
+    <a routerLink="/user/profile" routerLinkActive="active">Perfil</a>
   </div>
-
-  <div class="right">
-    <span class="email">{{ email }}</span>
-    <button (click)="logout()">Logout</button>
+  <div class="user-info">
+    <span>{{ email }}</span>
+    <button (click)="logout()" class="btn-logout">Sair</button>
   </div>
-
 </nav>
 
-<!-- DASHBOARD -->
-<div class="container">
+<div class="dashboard-container reveal visible">
+  <header class="dash-header">
+    <h1>Bem-vindo ao seu <span style="color: var(--primary)">Espaço Criativo</span></h1>
+    <p>Gerencie seus projetos de multimédia e tecnologia.</p>
+  </header>
 
-  <h1 class="title">Dashboard</h1>
-
-  <!-- STATS -->
-  <div class="cards">
-
-    <div class="card">
-      <h3>Services</h3>
-      <p>{{ servicesCount }}</p>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">{{ productsCount }}</div>
+      <div class="stat-label">Itens Adquiridos</div>
     </div>
-
-    <div class="card">
-      <h3>Products</h3>
-      <p>{{ productsCount }}</p>
+    <div class="stat-card">
+      <div class="stat-value">Ativo</div>
+      <div class="stat-label">Status da Conta</div>
     </div>
-
   </div>
 
-  <!-- PURCHASES -->
-  <div class="activity">
-
-    <h3>Recent Purchases</h3>
-
-    <!-- EMPTY -->
-    <div *ngIf="purchases.length === 0" class="empty">
-      Nenhuma compra encontrada 🚫
+  <section class="recent-purchases">
+    <div class="section-header">
+      <h2>Compras Recentes</h2>
     </div>
 
-    <!-- LIST -->
-    <div *ngFor="let item of purchases" class="item">
+    <div *ngIf="purchases.length === 0" class="empty-state">
+      <p>Ainda não realizou nenhuma compra. Explore nossos serviços de multimédia!</p>
+      <a routerLink="/user/products" class="btn-primary">Ver Catálogo</a>
+    </div>
 
-      <div>
-        <span>{{ item.name }}</span>
-        <small>{{ item.date }}</small>
+    <div class="purchase-list" *ngIf="purchases.length > 0">
+      <div *ngFor="let item of purchases" class="purchase-item">
+        <div class="purchase-info">
+          <span class="purchase-name">{{ item.name }}</span>
+          <span class="purchase-date">{{ item.date }}</span>
+        </div>
+        <div class="purchase-status">Concluído</div>
+        <button class="btn-delete" (click)="deletePurchase(item.id)">Remover</button>
       </div>
-
-      <button class="delete" (click)="deletePurchase(item.id)">
-        🗑
-      </button>
-
     </div>
-
-  </div>
-
+  </section>
 </div>

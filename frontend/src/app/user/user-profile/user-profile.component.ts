@@ -2,6 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 
+interface User {
+  name: string;
+  email: string;
+  role: string;
+}
+
 @Component({
   selector: 'app-user-profile',
   standalone: true,
@@ -11,7 +17,7 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class UserProfileComponent implements OnInit {
 
-  user = {
+  user: User = {
     name: '',
     email: '',
     role: 'user'
@@ -20,18 +26,31 @@ export class UserProfileComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-
-    // 🔥 carregar dados reais do localStorage
-    this.user.name = localStorage.getItem('name') || 'User';
-    this.user.email = localStorage.getItem('email') || 'user@techflow.com';
-    this.user.role = localStorage.getItem('role') || 'user';
+    this.loadUser();
   }
 
+  // 🔥 LOAD ORGANIZADO
+  private loadUser(): void {
+    this.user = {
+      name: this.getSafe('name', 'User'),
+      email: this.getSafe('email', 'user@openbox.com'),
+      role: this.getSafe('role', 'user')
+    };
+  }
+
+  // 🧠 SAFE GET (evita null/undefined)
+  private getSafe(key: string, fallback: string): string {
+    const value = localStorage.getItem(key);
+    return value && value.trim() !== '' ? value : fallback;
+  }
+
+  // 🚪 LOGOUT
   logout(): void {
     localStorage.clear();
     this.router.navigate(['/login']);
   }
 
+  // 🔙 BACK
   goBack(): void {
     this.router.navigate(['/user']);
   }
