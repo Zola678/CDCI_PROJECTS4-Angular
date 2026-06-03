@@ -50,12 +50,12 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     this.email = this.cookieService.get('email') || 'user@techflow.com';
 
     this.loadPurchases();
-...
-  logout(): void {
-    this.cookieService.deleteAll();
-    this.router.navigate(['/login']);
-  }
-}
+
+    // 🔥 escuta mudanças de produtos em outras páginas
+    window.addEventListener('products-updated', (e: any) => {
+      // se o event traz detalhe, faz update otimista
+      try {
+        const detail = e?.detail;
         if (detail) {
           // transformar detalhe num Purchase simples
           const p: Purchase = {
@@ -169,7 +169,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    localStorage.clear();
+    this.cookieService.deleteAll();
     this.router.navigate(['/login']);
   }
 }
