@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
 
 interface User {
   name: string;
@@ -28,11 +29,12 @@ export class UserSettingsComponent implements OnInit {
   loading = false;
   error = '';
 
-  private API_URL = 'http://127.0.0.1:8000/api';
+  private API_URL = 'http://localhost:8000/api';
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private cookieService: CookieService
   ) {}
 
   ngOnInit(): void {
@@ -42,9 +44,9 @@ export class UserSettingsComponent implements OnInit {
 
   // 🔹 carregar dados do user
   loadUser(): void {
-    this.user.name = localStorage.getItem('name') || 'User';
-    this.user.email = localStorage.getItem('email') || 'user@openbox.com';
-    this.user.role = localStorage.getItem('role') || 'user';
+    this.user.name = this.cookieService.get('name') || 'User';
+    this.user.email = this.cookieService.get('email') || 'user@openbox.com';
+    this.user.role = this.cookieService.get('role') || 'user';
   }
 
   // 🔹 tema
@@ -66,18 +68,9 @@ export class UserSettingsComponent implements OnInit {
     document.body.classList.add(this.darkMode ? 'dark' : 'light');
   }
 
-  // 🔹 headers auth
-  getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-  }
-
   // 🔹 logout
   logout(): void {
-    localStorage.clear();
+    this.cookieService.deleteAll();
     this.router.navigate(['/login']);
   }
 
@@ -89,13 +82,11 @@ export class UserSettingsComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.http.delete(`${this.API_URL}/user/delete`, {
-      headers: this.getHeaders()
-    }).subscribe({
+    this.http.delete(`${this.API_URL}/user/delete`).subscribe({
       next: () => {
 
         // limpa tudo
-        localStorage.clear();
+        this.cookieService.deleteAll();
 
         // redireciona
         this.router.navigate(['/login']);

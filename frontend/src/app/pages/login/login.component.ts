@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private cookieService: CookieService
   ) {}
 
   onLogin() {
@@ -39,7 +41,7 @@ export class LoginComponent {
 
     this.loading = true;
 
-    this.http.post('http://127.0.0.1:8000/api/login', {
+    this.http.post('http://localhost:8000/api/login', {
       email: this.email,
       password: this.password
     }).subscribe({
@@ -47,9 +49,9 @@ export class LoginComponent {
       next: (res: any) => {
         this.loading = false;
 
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('role', res.role);
-        localStorage.setItem('email', res.user_email);
+        this.cookieService.set('role', res.role);
+        this.cookieService.set('email', res.user_email);
+        this.cookieService.set('name', res.user_name || 'Usuário');
 
         // ⚡ routing limpo
         const route = res.role === 'admin' ? '/admin' : '/user';

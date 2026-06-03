@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink, Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 interface Product {
   id: number;
@@ -37,12 +38,13 @@ export class AdminDashboardComponent implements OnInit {
 
   email = '';
 
-  private API_URL = 'http://127.0.0.1:8000/api/admin/users';
+  private API_URL = 'http://localhost:8000/api/admin/users';
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private cdr: ChangeDetectorRef // 🔥 resolve problema de render
+    private cdr: ChangeDetectorRef, // 🔥 resolve problema de render
+    private cookieService: CookieService
   ) {}
 
   ngOnInit(): void {
@@ -52,17 +54,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // 🔐 sessão
   loadUserSession(): void {
-    this.email = localStorage.getItem('email') || 'admin@techflow.com';
-  }
-
-  // 🔐 obter headers com token
-  private getHeaders() {
-    const token = localStorage.getItem('token');
-    return {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    };
+    this.email = this.cookieService.get('email') || 'admin@techflow.com';
   }
 
   // 📡 carregar dados
@@ -70,7 +62,7 @@ export class AdminDashboardComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.http.get<User[]>(this.API_URL, this.getHeaders())
+    this.http.get<User[]>(this.API_URL)
       .subscribe({
         next: (res) => {
 
@@ -105,7 +97,7 @@ export class AdminDashboardComponent implements OnInit {
     const confirmDelete = confirm('Tens certeza que queres eliminar este usuário?');
     if (!confirmDelete) return;
 
-    this.http.delete(`${this.API_URL}/${userId}/force`, this.getHeaders())
+    this.http.delete(`${this.API_URL}/${userId}/force`)
       .subscribe({
         next: () => {
 
@@ -150,7 +142,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // 🚪 logout
   logout(): void {
-    localStorage.clear();
+    this.cookieService.deleteAll();
     this.router.navigate(['/login']);
   }
 }

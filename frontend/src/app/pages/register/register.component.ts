@@ -42,7 +42,7 @@ export class RegisterComponent {
     this.loading = true;
 
     // 🔥 AQUI ESTÁ A CHAMADA REAL
-    this.http.post('http://127.0.0.1:8000/api/register', {
+    this.http.post('http://localhost:8000/api/register', {
       name: this.name,
       email: this.email,
       password: this.password,

@@ -34,37 +34,50 @@ class AuthController extends Controller
     }
 
     // 🔐 LOGIN
-public function login(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required'
-    ]);
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-    $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-    // ❌ user não existe
-    if (!$user) {
-        return response()->json(['error' => 'Credenciais inválidas'], 401);
+        // ❌ user não existe
+        if (!$user) {
+            return response()->json(['error' => 'Credenciais inválidas'], 401);
+        }
+
+        // 🚫 user eliminado
+        if ($user->deleted_at !== null) {
+            return response()->json(['error' => 'Conta desativada'], 403);
+        }
+
+        // 🔐 password check
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'Credenciais inválidas'], 401);
+        }
+
+        // 🔑 token simples
+        $token = base64_encode($user->email . '|' . now());
+
+        // 🍪 Configurar Cookie Seguro
+        $cookie = cookie(
+            'auth_token',      // Nome
+            $token,            // Valor
+            120,               // Minutos (2 horas)
+            '/',               // Path
+            null,              // Domain
+            false,             // Secure (mudar para true em produção com HTTPS)
+            true,              // HttpOnly (Fundamental para segurança)
+            false,             // Raw
+            'Lax'              // SameSite
+        );
+
+        return response()->json([
+            'message' => 'Login realizado com sucesso',
+            'user_email' => $user->email,
+            'role' => $user->role
+        ])->withCookie($cookie);
     }
-
-    // 🚫 user eliminado
-    if ($user->deleted_at !== null) {
-        return response()->json(['error' => 'Conta desativada'], 403);
-    }
-
-    // 🔐 password check
-    if (!Hash::check($request->password, $user->password)) {
-        return response()->json(['error' => 'Credenciais inválidas'], 401);
-    }
-
-    // 🔑 token simples
-    $token = base64_encode($user->email . '|' . now());
-
-    return response()->json([
-        'token' => $token,
-        'user_email' => $user->email,
-        'role' => $user->role
-    ]);
-}
 }

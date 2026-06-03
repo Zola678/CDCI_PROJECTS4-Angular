@@ -63,6 +63,7 @@ class ProductController extends Controller
             ], 401);
         }
 
+        // incluir trashed? usar apenas active product for normal delete
         $product = Product::find($id);
 
         if (!$product) {

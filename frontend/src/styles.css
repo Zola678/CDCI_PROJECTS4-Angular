@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-:root {
+/* --- Configuração de Temas --- */
+
+/* Tema Claro (Padrão) */
+:root, body.light {
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
   --bg-main: #f8fafc;
@@ -8,6 +11,8 @@
   --text-muted: #64748b;
   --surface: #ffffff;
   --border: #e2e8f0;
+  --navbar-bg: rgba(255, 255, 255, 0.8);
+  --nav-link-color: var(--text-muted);
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -15,17 +20,38 @@
   --transition: all 0.3s ease;
 }
 
-/* Dark Mode Variables */
+/* Tema Escuro (Ativado por classe .dark ou preferência do sistema se não houver classe .light) */
 body.dark {
-  --bg-main: #0f172a;
+  --bg-main: #0a0f1a;
   --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --surface: #1e293b;
-  --border: #334155;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  --text-muted: #cbd5e1;
+  --surface: #161e2e;
+  --border: #1e293b;
+  --primary: #60a5fa;
+  --primary-hover: #93c5fd;
+  --navbar-bg: rgba(10, 15, 26, 0.8);
+  --nav-link-color: var(--text-main);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.6);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.7);
 }
+
+/* Detecção Automática do Sistema (Apenas se o usuário não escolheu um tema manualmente) */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) body:not(.light) {
+    --bg-main: #0a0f1a;
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
+    --surface: #161e2e;
+    --border: #1e293b;
+    --primary: #60a5fa;
+    --primary-hover: #93c5fd;
+    --navbar-bg: rgba(10, 15, 26, 0.8);
+    --nav-link-color: var(--text-main);
+  }
+}
+
+/* --- Estilos Globais --- */
 
 * {
   margin: 0;

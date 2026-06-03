@@ -7,13 +7,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--navbar-bg);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 100;
   box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
 }
 
 .logo {
@@ -21,6 +22,7 @@
   font-size: 1.25rem;
   color: var(--primary);
   letter-spacing: -0.5px;
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.2);
 }
 
 .links {
@@ -30,14 +32,27 @@
 }
 
 .links a {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.9rem;
-  color: var(--text-muted);
-  transition: color 0.2s;
+  color: var(--nav-link-color);
+  transition: all 0.2s ease;
 }
 
 .links a:hover {
   color: var(--primary);
+  text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .links a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+  }
+}
+
+body.dark .links a:hover {
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
 }
 
 /* =========================

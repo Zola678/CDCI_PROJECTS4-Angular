@@ -28,7 +28,7 @@ export class AdminProductsComponent implements OnInit {
   loading = false;
   error = '';
 
-  private API_URL = 'http://127.0.0.1:8000/api/admin/products';
+  private API_URL = 'http://localhost:8000/api/admin/products';
 
   constructor(
     private http: HttpClient,
@@ -44,23 +44,13 @@ export class AdminProductsComponent implements OnInit {
     });
   }
 
-  // 🔐 obter headers com token
-  private getHeaders() {
-    const token = localStorage.getItem('token');
-    return {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    };
-  }
-
   // 📦 carregar produtos
   loadProducts(): void {
 
     this.loading = true;
     this.error = '';
 
-    this.http.get<any>(this.API_URL, this.getHeaders())
+    this.http.get<any>(this.API_URL)
       .subscribe({
         next: (res) => {
 
@@ -101,7 +91,7 @@ export class AdminProductsComponent implements OnInit {
     const confirmDelete = confirm('Tens certeza que queres eliminar este produto?');
     if (!confirmDelete) return;
 
-    this.http.delete(`${this.API_URL.replace('/admin', '')}/${id}`, this.getHeaders())
+    this.http.delete(`${this.API_URL.replace('/admin', '')}/${id}`)
       .subscribe({
         next: () => {
 

@@ -13,8 +13,12 @@
     <p>Soluções de elite para os seus projetos digitais.</p>
   </header>
 
-  <div class="alert-success" *ngIf="successMessage">
+  <div class="alert-success" *ngIf="successMessage" role="status" aria-live="polite">
     <span class="icon">✅</span> {{ successMessage }}
+  </div>
+
+  <div class="alert-error" *ngIf="lastError" role="alert">
+    <span class="icon">⚠️</span> {{ lastError }}
   </div>
 
   <div class="grid">
@@ -25,7 +29,10 @@
       
       <div class="card-footer">
         <span class="price">{{ item.price | currency:'USD' }}</span>
-        <button class="btn-primary" (click)="buy(item)">Adquirir</button>
+        <button class="btn-primary" (click)="buy(item)" [disabled]="isBuying(item.id)">
+          <span *ngIf="!isBuying(item.id)">Adquirir</span>
+          <span *ngIf="isBuying(item.id)">Comprando...</span>
+        </button>
       </div>
     </div>
   </div>

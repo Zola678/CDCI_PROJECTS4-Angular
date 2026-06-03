@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { PurchaseService } from '../../services/purchase.service';
 
 interface Product {
   id: number;
@@ -33,49 +34,83 @@ export class UserProductsComponent implements OnInit {
 
   purchasedItems: any[] = [];
   successMessage: string = '';
+  // armazenar id do item que está a ser comprado; evita desativar todos os botões
+  buyingId: number | null = null;
+  lastError = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private purchaseService: PurchaseService) {}
 
   ngOnInit(): void {
     // Não carregamos mais do localStorage, mas podemos manter para histórico offline se quiseres
     // this.loadPurchases(); 
   }
 
-  // 🔐 Headers com Token
-  private getHeaders() {
-    const token = localStorage.getItem('token');
-    return {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    };
-  }
-
   buy(item: Product): void {
     
     this.successMessage = '';
-
+    this.lastError = '';
+    this.buyingId = item.id;
+    // feedback imediato para o utilizador (fallback)
+    this.successMessage = `Enviando compra: ${item.name}...`;
+    try { this.cdr.detectChanges(); } catch(e) {}
     // 🔥 Integração REAL com Backend
-    this.http.post('http://127.0.0.1:8000/api/products', {
+    this.http.post('http://localhost:8000/api/products', {
       name: item.name,
       description: item.description || '',
       quantity: 1,
       price: item.price
-    }, this.getHeaders()).subscribe({
+    }).subscribe({
       next: (res: any) => {
+        // mostra sucesso
+        console.debug('Resposta do servidor (compra):', res);
         this.successMessage = `Sucesso! Você adquiriu: ${item.name}`;
-        
-        // Auto-hide message
-        setTimeout(() => this.successMessage = '', 4000);
 
-        // Notifica dashboard
-        window.dispatchEvent(new Event('products-updated'));
+        // adiciona compra localmente (optimistic) e notifica o dashboard com detalhe
+        try {
+          const created = res; // backend retorna o product criado
+          console.debug('Compra criada:', created);
+          this.purchasedItems.push(created);
+          // notificar via PurchaseService (in-memory) para o dashboard atualizar imediatamente
+          try {
+            const p = { id: created.id, name: created.name, date: created.created_at || new Date().toISOString() };
+            this.purchaseService.push(p);
+          } catch(e) {}
+          // manter dispatch window para compatibilidade
+          window.dispatchEvent(new CustomEvent('products-updated', { detail: created, bubbles: true, composed: true }));
+        } catch (e) {
+          window.dispatchEvent(new CustomEvent('products-updated', { bubbles: true, composed: true }));
+        }
+
+        // Auto-hide message
+        setTimeout(() => { this.successMessage = ''; try { this.cdr.detectChanges(); } catch(e) {} }, 4000);
+        // notificar toast global (dashboard pode mostrar mensagem)
+        try {
+          // guardar em sessionStorage como fallback caso o dashboard não esteja carregado
+          // dispatch real-time only; não persistir em storage para evitar mostrar mensagem quando
+          // o utilizador apenas navega depois da compra
+          console.debug('Dispatching purchase-success with message:', this.successMessage);
+          window.dispatchEvent(new CustomEvent('purchase-success', { detail: this.successMessage, bubbles: true, composed: true }));
+        } catch (e) {
+          // ambiente sem CustomEvent (fallback)
+          try { window.dispatchEvent(new Event('purchase-success')); } catch {}
+        }
+        this.buyingId = null;
+        try { this.cdr.detectChanges(); } catch(e) {}
       },
       error: (err) => {
         console.error('Erro na compra:', err);
-        alert('Erro ao processar a compra. Tente novamente.');
+        this.lastError = err?.error?.message || err?.message || 'Erro ao processar a compra.';
+        alert(this.lastError);
+        // limpar mensagem de envio se houver
+        this.successMessage = '';
+        this.buyingId = null;
+        try { this.cdr.detectChanges(); } catch(e) {}
       }
     });
+  }
+
+  isBuying(id: number): boolean {
+    return this.buyingId === id;
   }
 
   trackById(index: number, item: Product): number {

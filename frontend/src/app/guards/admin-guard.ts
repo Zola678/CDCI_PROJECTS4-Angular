@@ -1,15 +1,18 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { Router, CanActivateFn } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 export const adminGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const token = localStorage.getItem('token');
-  const role = localStorage.getItem('role');
+  const cookieService = inject(CookieService);
 
-  if (token && role === 'admin') {
+  const email = cookieService.get('email');
+  const role = cookieService.get('role');
+
+  if (email && role === 'admin') {
     return true;
   }
 
-  router.navigate(['/login']);
+  router.navigate(['/user']); // ou logout
   return false;
 };

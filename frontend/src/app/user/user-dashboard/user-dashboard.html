@@ -17,6 +17,10 @@
     <p>Gerencie seus projetos de multimédia e tecnologia.</p>
   </header>
 
+    <div class="alert-success" *ngIf="successMessage" role="status" aria-live="polite">
+      <span class="icon">✅</span> {{ successMessage }}
+    </div>
+
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-value">{{ productsCount }}</div>
@@ -33,6 +37,10 @@
       <h2>Compras Recentes</h2>
     </div>
 
+    <div style="margin-bottom:1rem;">
+      <button class="btn-primary" (click)="loadPurchases()">Recarregar compras (debug)</button>
+    </div>
+
     <div *ngIf="purchases.length === 0" class="empty-state">
       <p>Ainda não realizou nenhuma compra. Explore nossos serviços de multimédia!</p>
       <a routerLink="/user/products" class="btn-primary">Ver Catálogo</a>
@@ -47,6 +55,12 @@
         <div class="purchase-status">Concluído</div>
         <button class="btn-delete" (click)="deletePurchase(item.id)">Remover</button>
       </div>
+    </div>
+
+    <!-- debug: mostrar dados crus para facilitar diagnóstico -->
+    <div style="margin-top:1rem; font-size:0.9rem; color:var(--text-muted);">
+      <strong>Debug purchases (raw):</strong>
+      <pre style="max-height:200px; overflow:auto; background:#f9fafb; padding:0.5rem; border-radius:6px">{{ purchases | json }}</pre>
     </div>
   </section>
 </div>
