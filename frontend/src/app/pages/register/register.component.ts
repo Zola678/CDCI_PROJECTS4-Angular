@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http'; // 👈 IMPORTANTE
 import { RouterLink, Router } from '@angular/router';
+import { environment } from '../../config';
 
 @Component({
   selector: 'app-register',
@@ -42,7 +43,7 @@ export class RegisterComponent {
     this.loading = true;
 
     // 🔥 AQUI ESTÁ A CHAMADA REAL
-    this.http.post('http://localhost:8000/api/register', {
+    this.http.post(`${environment.apiUrl}/register`, {
       name: this.name,
       email: this.email,
       password: this.password,

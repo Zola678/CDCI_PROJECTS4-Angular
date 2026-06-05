@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { environment } from '../../config';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +42,7 @@ export class LoginComponent {
 
     this.loading = true;
 
-    this.http.post('http://localhost:8000/api/login', {
+    this.http.post(`${environment.apiUrl}/login`, {
       email: this.email,
       password: this.password
     }).subscribe({

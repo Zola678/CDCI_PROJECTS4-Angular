@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
+import { environment } from '../../config';
 
 interface User {
   name: string;
@@ -29,7 +30,7 @@ export class UserSettingsComponent implements OnInit {
   loading = false;
   error = '';
 
-  private API_URL = 'http://localhost:8000/api';
+  private API_URL = environment.apiUrl;
 
   constructor(
     private router: Router,

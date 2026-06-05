@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../config';
 
 interface User {
   id: number;
@@ -28,7 +29,7 @@ export class AdminUsersComponent implements OnInit {
 
   selectedUser: User | null = null;
 
-  private API_URL = 'http://localhost:8000/api/admin/users';
+  private API_URL = `${environment.apiUrl}/admin/users`;
 
   constructor(
     private http: HttpClient,

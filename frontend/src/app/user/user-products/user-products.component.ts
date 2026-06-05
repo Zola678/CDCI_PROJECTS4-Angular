@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { PurchaseService } from '../../services/purchase.service';
+import { environment } from '../../config';
 
 interface Product {
   id: number;
@@ -54,7 +55,7 @@ export class UserProductsComponent implements OnInit {
     this.successMessage = `Enviando compra: ${item.name}...`;
     try { this.cdr.detectChanges(); } catch(e) {}
     // 🔥 Integração REAL com Backend
-    this.http.post('http://localhost:8000/api/products', {
+    this.http.post(`${environment.apiUrl}/products`, {
       name: item.name,
       description: item.description || '',
       quantity: 1,

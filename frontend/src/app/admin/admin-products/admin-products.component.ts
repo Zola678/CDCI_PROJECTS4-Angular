@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../config';
 
 interface Product {
   id: number;
@@ -28,7 +29,7 @@ export class AdminProductsComponent implements OnInit {
   loading = false;
   error = '';
 
-  private API_URL = 'http://localhost:8000/api/admin/products';
+  private API_URL = `${environment.apiUrl}/admin/products`;
 
   constructor(
     private http: HttpClient,
